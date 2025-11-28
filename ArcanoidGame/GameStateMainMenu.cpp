@@ -3,7 +3,7 @@
 #include "Game.h"
 #include <assert.h>
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	void GameStateMainMenuData::Init()
 	{
@@ -94,7 +94,7 @@ namespace SnakeGame
 		exitGameItem.childrens.push_back(noItem);
 
 		MenuItem mainMenu;
-		mainMenu.hintText.setString("Snake Game");
+		mainMenu.hintText.setString("Arcanoid Game");
 		mainMenu.hintText.setFont(font);
 		mainMenu.hintText.setCharacterSize(48);
 		mainMenu.hintText.setFillColor(sf::Color::Red);
@@ -111,7 +111,7 @@ namespace SnakeGame
 	}
 
 
-	void GameStateMainMenuData::HandleGameState(const sf::Event& event)
+	void GameStateMainMenuData::HandleWindowEvent(const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{

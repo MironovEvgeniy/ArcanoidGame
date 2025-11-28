@@ -5,6 +5,45 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Sources\GameStates">
+      <UniqueIdentifier>{e4e5208f-b338-43ec-9a8d-a916c9f977b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameStates\GameOver">
+      <UniqueIdentifier>{bf7fb9d1-e8d1-4274-8783-a75654caa23c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameStates\MainMenu">
+      <UniqueIdentifier>{e5be9f37-6576-42e2-8363-324f30923e4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameStates\PauseMenu">
+      <UniqueIdentifier>{1e724c36-b0e2-4e80-a541-8aad0da6fa27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameStates\Playing">
+      <UniqueIdentifier>{0116b597-0572-4b7f-8547-936546e59568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameStates\Records">
+      <UniqueIdentifier>{ffcf7bc1-0384-4320-9973-3c77b5992716}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameStates\WinningMenu">
+      <UniqueIdentifier>{f89d9b0e-3271-4c5f-95f5-5f4012ecafe9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObjects">
+      <UniqueIdentifier>{f00b487d-5fc1-4756-a27a-49b03245aed2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObjects\Ball">
+      <UniqueIdentifier>{58955b5a-b087-42ed-957b-50cbd0f67e97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObjects\Block">
+      <UniqueIdentifier>{b9c7069d-cd2d-4de4-b580-14882c0e84a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObjects\Platform">
+      <UniqueIdentifier>{5836a1c8-05c3-4d26-a4a9-50b4a2b164e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Miscellaneous">
+      <UniqueIdentifier>{72c6a62c-2dc3-477a-bf35-2545f3f52dcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\MenuInterface">
+      <UniqueIdentifier>{ea524afc-6be3-4e46-bad6-81bb253b2df8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -13,86 +52,112 @@
     <ClCompile Include="Game.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="GameStatePlaying.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameStateGameOver.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameStatePauseMenu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameStateMainMenu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameStateRecords.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="GameState.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Sources\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateData.cpp">
+      <Filter>Sources\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateGameOver.cpp">
+      <Filter>Sources\GameStates\GameOver</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateMainMenu.cpp">
+      <Filter>Sources\GameStates\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStatePauseMenu.cpp">
+      <Filter>Sources\GameStates\PauseMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStatePlaying.cpp">
+      <Filter>Sources\GameStates\Playing</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateRecords.cpp">
+      <Filter>Sources\GameStates\Records</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateWin.cpp">
+      <Filter>Sources\GameStates\WinningMenu</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Sources\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Ball.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Sources\GameObjects\Ball</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Sources\GameObjects\Block</Filter>
     </ClCompile>
     <ClCompile Include="Platform.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Sources\GameObjects\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Sources\Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Sources\Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Sources\MenuInterface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="GameSettings.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="GameStatePlaying.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="GameStateGameOver.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="GameStatePauseMenu.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="GameStateMainMenu.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="GameStateRecords.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="Text.h" />
     <ClInclude Include="Application.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
-      <Filter>Sources</Filter>
+      <Filter>Sources\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateData.h">
+      <Filter>Sources\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateGameOver.h">
+      <Filter>Sources\GameStates\GameOver</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateMainMenu.h">
+      <Filter>Sources\GameStates\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStatePauseMenu.h">
+      <Filter>Sources\GameStates\PauseMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStatePlaying.h">
+      <Filter>Sources\GameStates\Playing</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateRecords.h">
+      <Filter>Sources\GameStates\Records</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateWin.h">
+      <Filter>Sources\GameStates\WinningMenu</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Sources</Filter>
+      <Filter>Sources\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Ball.h">
-      <Filter>Sources</Filter>
+      <Filter>Sources\GameObjects\Ball</Filter>
     </ClInclude>
-    <ClInclude Include="Platform.h" />
+    <ClInclude Include="Block.h">
+      <Filter>Sources\GameObjects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
+      <Filter>Sources\GameObjects\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSettings.h">
+      <Filter>Sources\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Sources\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Sources\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Sources\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Sources\MenuInterface</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

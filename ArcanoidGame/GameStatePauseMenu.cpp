@@ -3,7 +3,7 @@
 #include "Game.h"
 #include <assert.h>
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	void GameStatePauseMenuData::Init()
 	{
@@ -41,7 +41,7 @@ namespace SnakeGame
 		menu.Init(pauseMenu);
 	}
 
-	void GameStatePauseMenuData::HandleGameState(const sf::Event& event)
+	void GameStatePauseMenuData::HandleWindowEvent(const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{

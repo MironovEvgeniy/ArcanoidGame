@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <sstream>
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	const char* PLAYER_NAME = "Player";
 
@@ -75,7 +75,7 @@ namespace SnakeGame
 		hintText.setString("Press Space to restart\nEsc to exit to main menu");
 	}
 
-	void GameStateGameOverData::HandleGameState(const sf::Event& event)
+	void GameStateGameOverData::HandleWindowEvent(const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{

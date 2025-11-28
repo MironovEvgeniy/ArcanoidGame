@@ -6,7 +6,7 @@
 #include "GameSettings.h"
 #include <unordered_map>
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	enum class GameOptions: std::uint8_t
 	{

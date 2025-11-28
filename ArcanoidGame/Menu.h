@@ -4,7 +4,7 @@
 #include <list>
 #include <functional>	
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	struct MenuItem
 	{
@@ -12,7 +12,7 @@ namespace SnakeGame
 		sf::Text hintText; // Visible when child item is selected
 		Orientation childrenOrientation = Orientation::Vertical;
 		Alignment childrenAlignment = Alignment::Min;
-		float childrenSpacing;
+		float childrenSpacing = 10.f;
 
 		sf::Color selectedColor = sf::Color::Yellow;
 		sf::Color deselectedColor = sf::Color::White;

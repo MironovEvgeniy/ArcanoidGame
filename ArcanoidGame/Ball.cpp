@@ -9,14 +9,14 @@ namespace
 	const std::string TEXTURE_ID = "ball";
 }
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	void Ball::Init()
 	{
 		assert(texture.loadFromFile(TEXTURES_PATH + TEXTURE_ID + ".png"));
 
 		InitSprite(sprite, BALL_SIZE, BALL_SIZE, texture);
-		sprite.setPosition({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - PLATFORM_HEIGHT - BALL_SIZE / 2.f });
+		sprite.setPosition({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - 20.f - PLATFORM_HEIGHT - BALL_SIZE / 2.f });
 
 		const float angle = 45.f + rand() % 90; // [45, 135] degree
 		const auto pi = std::acos(-1.f);
@@ -38,7 +38,12 @@ namespace SnakeGame
 		}
 	}
 
-	void Ball::ReboundFromPlatform()
+	void Ball::ChangeDirectionX()
+	{
+		direction.x *= -1;
+	}
+
+	void Ball::ChangeDirectionY()
 	{
 		direction.y *= -1;
 	}

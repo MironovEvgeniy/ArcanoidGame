@@ -2,15 +2,16 @@
 #include "SFML/Graphics.hpp"
 #include "GameObject.h"
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	class Ball : public GameObject
 	{
 	public:
-		void Init();
-		void Update(float timeDelta);
+		void Init() override;
+		void Update(float timeDelta) override;
 
-		void ReboundFromPlatform();
+		void ChangeDirectionX();
+		void ChangeDirectionY();
 
 	private:
 		sf::Vector2f direction;

@@ -3,29 +3,34 @@
 #include "SFML/Audio.hpp"
 #include "Platform.h"
 #include "Ball.h"
+#include "Block.h"
+#include "GameStateData.h"
 
 
-namespace SnakeGame
+
+namespace ArcanoidGame
 {
 	class Game;
 
-	class GameStatePlayingData
+	class GameStatePlayingData : public GameStateData
 	{
 	public:
-		void Init();
-		void HandleGameState(const sf::Event& event);
-		void Update(float timeDelta);
-		void Draw(sf::RenderWindow& window);
-
+		void Init() override;
+		void HandleWindowEvent(const sf::Event& event) override;
+		void Update(float timeDelta) override;
+		void Draw(sf::RenderWindow& window) override;
+		 
 	private:
+		void createBlocks();
+		void BallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& blockRect, bool& inverseX, bool& inverseY);
 		// Resources
 		sf::Font font;
 		sf::SoundBuffer eatAppleSoundBuffer;
 		sf::SoundBuffer gameOverSoundBuffer;
 
 		// Game data
-		Platform platform;
-		Ball ball;
+		std::vector<std::shared_ptr<GameObject>> gameObjects;
+		std::vector<std::shared_ptr<Block>> blocks;
 
 		// UI data
 		sf::Text scoreText;

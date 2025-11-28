@@ -1,18 +1,20 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Menu.h"
+#include "GameStateData.h"
 
-namespace SnakeGame
+
+namespace ArcanoidGame
 {
 	class Game;
 
-	class GameStatePauseMenuData
+	class GameStatePauseMenuData : public GameStateData
 	{
 	public:
-		void Init();
-		void HandleGameState(const sf::Event& event);
-		void Update(float timeDelta);
-		void Draw(sf::RenderWindow& window);
+		void Init() override;
+		void HandleWindowEvent(const sf::Event& event) override;
+		void Update(float timeDelta) override;
+		void Draw(sf::RenderWindow& window) override;
 
 	private:
 

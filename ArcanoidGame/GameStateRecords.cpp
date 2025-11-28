@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <sstream>
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	void GameStateRecordsData::Init()
 	{
@@ -47,7 +47,7 @@ namespace SnakeGame
 		hintText.setCharacterSize(24);
 	}
 
-	void GameStateRecordsData::HandleGameState(const sf::Event& event)
+	void GameStateRecordsData::HandleWindowEvent(const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{

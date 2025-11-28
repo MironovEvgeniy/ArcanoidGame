@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <sstream>
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	void GameStatePlayingData::Init()
 	{	
@@ -29,14 +29,28 @@ namespace SnakeGame
 		inputHintText.setOrigin(GetTextOrigin(inputHintText, { 1.f, 0.f }));
 
 		//Init platform and ball
-		platform.Init();
-		ball.Init();
+		
+		gameObjects.clear();
+		gameObjects.push_back(std::make_shared<Platform>());
+		gameObjects.push_back(std::make_shared<Ball>());
+		
+		createBlocks();
+
+		for (auto&& object : gameObjects)
+		{
+			object->Init();
+		}
+
+		for (auto&& block : blocks)
+		{
+			block->Init();
+		}
 
 		// Init sounds
 		gameOverSound.setBuffer(gameOverSoundBuffer);
 	}
 
-	void GameStatePlayingData::HandleGameState(const sf::Event& event)
+	void GameStatePlayingData::HandleWindowEvent(const sf::Event& event)
 	{
 
 		if (event.type == sf::Event::KeyPressed)
@@ -50,15 +64,64 @@ namespace SnakeGame
 
 	void GameStatePlayingData::Update(float timeDelta)
 	{
-		platform.Update(timeDelta);
-		ball.Update(timeDelta);
-
-		const bool isCollision = platform.CheckCollisionWithBall(ball);
-		if (isCollision) {
-			ball.ReboundFromPlatform();
+		
+		for (auto&& object : gameObjects)
+		{
+			object->Update(timeDelta);
 		}
 
-		const bool isGameFinished = !isCollision && ball.GetPosition().y > platform.GetRect().top;
+		Platform* platform = (Platform*)gameObjects[0].get();
+		Ball* ball = (Ball*)gameObjects[1].get();
+
+		const bool isCollision = platform->CheckCollisionWithBall(*ball);
+		if (isCollision) {
+			ball->ChangeDirectionY();
+		}
+		
+		//////////
+		
+			/*const bool isCollisionWithBlock = block->CheckCollisionWithBall(*ball);
+			if (isCollisionWithBlock)
+			{
+				ball->ReboundFromPlatform();
+				gameObjects.erase(gameObjects.begin() + 2);
+			}
+		*/
+		bool inverseX = false;
+		bool inverseY = false;
+
+		for (int i = blocks.size() - 1; i >= 0; --i)
+		{
+			if (blocks[i]->CheckCollisionWithBall(*ball))
+			{
+				const auto ballPos = ball->GetPosition();
+				const auto blockRect = blocks[i]->GetRect();
+
+				BallInverse(ballPos, blockRect, inverseX, inverseY);
+
+				blocks.erase(blocks.begin() + i);			
+			}
+		}
+
+		if (inverseX)
+		{
+			ball->ChangeDirectionX();
+		}
+
+		if (inverseY)
+		{
+			ball->ChangeDirectionY();
+		}
+		
+
+		const bool isGameFinished = !isCollision && ball->GetPosition().y > platform->GetRect().top;
+		const bool isGameWin = blocks.size() == 0;
+
+		if (isGameWin)
+		{
+			Game& game = Application::Instance().GetGame();
+			game.PushState(GameStateType::GameWin, false);
+		}
 
 		if (isGameFinished)
 		{
@@ -78,10 +141,16 @@ namespace SnakeGame
 		window.draw(background);
 
 		// Draw game objects
-		platform.Draw(window);
-		ball.Draw(window);
+		for (auto&& object : gameObjects)
+		{
+			object->Draw(window);
+		}
 
-
+		for (auto&& block : blocks)
+		{
+			block->Draw(window);
+		}
+		
 		scoreText.setOrigin(GetTextOrigin(scoreText, { 0.f, 0.f }));
 		scoreText.setPosition(10.f, 10.f);
 		window.draw(scoreText);
@@ -89,5 +158,42 @@ namespace SnakeGame
 		sf::Vector2f viewSize = window.getView().getSize();
 		inputHintText.setPosition(viewSize.x - 10.f, 10.f);
 		window.draw(inputHintText);
+	}
+
+	void GameStatePlayingData::createBlocks()
+	{
+		int row = 0;
+		for (; row < BLOCKS_COUNT_ROWS; ++row)
+		{
+			for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
+			{
+				auto block = std::make_shared<Block>();
+				block->shape.setPosition(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * (BLOCK_HEIGHT + BLOCK_SHIFT) }));
+				blocks.emplace_back(block);
+			}
+		}
+
+	}
+
+	void GameStatePlayingData::BallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& blockRect, bool& inverseX, bool& inverseY)
+	{
+		//Низ блока
+		if (ballPos.y > blockRect.top + blockRect.height)
+		{
+			inverseY = true;
+			return;
+		}
+		//Левая часть
+		if (ballPos.x < blockRect.left)
+		{
+			inverseX = true;
+			return;
+		}
+		//Правая часть
+		if (ballPos.x > blockRect.left + blockRect.width)
+		{
+			inverseX = true;
+			return;
+		}
 	}
 }

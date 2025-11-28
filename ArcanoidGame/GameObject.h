@@ -1,12 +1,16 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	class GameObject
 	{
 	public:
-		void Draw(sf::RenderWindow& window);
+		virtual ~GameObject() = default;
+
+		virtual void Init() = 0;
+		virtual void Update(float timeDelta) = 0;
+		virtual void Draw(sf::RenderWindow& window);
 
 		const sf::Vector2f& GetPosition() const { return sprite.getPosition(); }
 		const sf::FloatRect& GetRect() const { return sprite.getGlobalBounds(); }

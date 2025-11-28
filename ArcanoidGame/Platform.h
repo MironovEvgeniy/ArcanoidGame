@@ -2,15 +2,15 @@
 #include "SFML/Graphics.hpp"
 #include "GameObject.h"
 
-namespace SnakeGame
+namespace ArcanoidGame
 {
 	class Ball;
 
 	class Platform : public GameObject
 	{
 	public:
-		void Init();
-		void Update(float timeDelta);
+		void Init() override;
+		void Update(float timeDelta) override;
 
 		bool CheckCollisionWithBall(const Ball& ball);
 
