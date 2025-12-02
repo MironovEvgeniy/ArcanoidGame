@@ -2,6 +2,7 @@
 #include "GameSettings.h"
 #include "Sprite.h"
 #include <assert.h>
+#include "randomizer.h"
 
 namespace
 {
@@ -11,29 +12,26 @@ namespace
 
 namespace ArcanoidGame
 {
-	void Ball::Init()
+
+	Ball::Ball(const sf::Vector2f& position)
+		: GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, BALL_SIZE, BALL_SIZE)
 	{
-		assert(texture.loadFromFile(TEXTURES_PATH + TEXTURE_ID + ".png"));
-
-		InitSprite(sprite, BALL_SIZE, BALL_SIZE, texture);
-		sprite.setPosition({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - 20.f - PLATFORM_HEIGHT - BALL_SIZE / 2.f });
-
-		const float angle = 45.f + rand() % 90; // [45, 135] degree
+		const float angle = 90;
 		const auto pi = std::acos(-1.f);
 		direction.x = std::cos(pi / 180.f * angle);
 		direction.y = std::sin(pi / 180.f * angle);
 	}
-
+	
 	void Ball::Update(float timeDelta)
 	{
 		const auto pos = sprite.getPosition() + BALL_SPEED * timeDelta * direction;
 		sprite.setPosition(pos);
 
-		if (pos.x <= 0 || pos.x >= SCREEN_WIDTH) {
+		if (pos.x - BALL_SIZE / 2.f <= 0 || pos.x + BALL_SIZE / 2.f >= SCREEN_WIDTH) {
 			direction.x *= -1;
 		}
 
-		if (pos.y <= 0 || pos.y >= SCREEN_HEIGHT) {
+		if (pos.y - BALL_SIZE / 2.f <= 0 || pos.y + BALL_SIZE / 2.f >= SCREEN_HEIGHT) {
 			direction.y *= -1;
 		}
 	}
@@ -46,5 +44,27 @@ namespace ArcanoidGame
 	void Ball::ChangeDirectionY()
 	{
 		direction.y *= -1;
+	}
+
+	bool Ball::GetCollision(std::shared_ptr<Collidable> collidable) const
+	{
+		auto gameObject = std::dynamic_pointer_cast<GameObject>(collidable);
+		assert(gameObject);
+
+		return GetRect().intersects(gameObject->GetRect());
+	}
+
+	void Ball::ChangeAngle(float x)
+	{
+		lastAngle = x;
+		const auto pi = std::acos(-1.f);
+		direction.x = (x / abs(x)) * std::cos(pi / 180.f * x);
+		direction.y = -1 * abs(std::sin(pi / 180.f * x));
+	}
+
+	void Ball::OnHit()
+	{
+		lastAngle += random<float>(-5, 5);
+		ChangeAngle(lastAngle);
 	}
 }

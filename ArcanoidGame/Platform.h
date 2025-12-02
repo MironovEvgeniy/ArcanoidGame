@@ -1,19 +1,22 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "GameObject.h"
+#include "Collidable.h"
 
 namespace ArcanoidGame
 {
-	class Ball;
-
-	class Platform : public GameObject
+	class Platform : public GameObject, public Collidable
 	{
 	public:
-		void Init() override;
+		Platform(const sf::Vector2f& position);
+		
+		//void Init() override;
 		void Update(float timeDelta) override;
 
-		bool CheckCollisionWithBall(const Ball& ball);
-
+		bool GetCollision(std::shared_ptr<Collidable> collidable) const override;
+		void OnHit() override {}
+		bool CheckCollision(std::shared_ptr<Collidable> collidable) override;
+		
 	private:
 		void Move(float speed);
 	};

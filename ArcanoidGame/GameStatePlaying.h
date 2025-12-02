@@ -3,8 +3,9 @@
 #include "SFML/Audio.hpp"
 #include "Platform.h"
 #include "Ball.h"
-#include "Block.h"
 #include "GameStateData.h"
+#include "Block.h"
+#include "StrongBlock.h"
 
 
 

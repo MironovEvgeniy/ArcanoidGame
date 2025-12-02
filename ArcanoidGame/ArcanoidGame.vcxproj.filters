@@ -100,6 +100,9 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Sources\MenuInterface</Filter>
     </ClCompile>
+    <ClCompile Include="StrongBlock.cpp">
+      <Filter>Sources\GameObjects\Block</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -158,6 +161,18 @@
     </ClInclude>
     <ClInclude Include="Menu.h">
       <Filter>Sources\MenuInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Collidable.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="randomizer.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="IDelayedAction.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="StrongBlock.h">
+      <Filter>Sources\GameObjects\Block</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

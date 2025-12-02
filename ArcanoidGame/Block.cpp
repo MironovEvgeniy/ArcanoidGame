@@ -1,16 +1,40 @@
 #include "Block.h"
-#include "Ball.h"
-#include "GameSettings.h"
+#include "Sprite.h"
 
+#include "GameSettings.h"
+#include <assert.h>
+
+
+namespace
+{
+	const std::string TEXTURE_ID = "platform";
+}
 
 namespace ArcanoidGame
 {
-	void Block::Init()
+	Block::Block(const sf::Vector2f& position, const sf::Color& color)
+		: GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, BLOCK_WIDTH, BLOCK_HEIGHT)
 	{
-		shape.setOrigin({ BLOCK_WIDTH / 2.f, BLOCK_HEIGHT / 2.f });
-		shape.setFillColor(sf::Color::Blue);
-		shape.setSize({ BLOCK_WIDTH, BLOCK_HEIGHT });
-		//shape.setPosition({ SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f });
+		sprite.setColor(color);
+	}
+
+	Block::~Block()
+	{
+	}
+
+	bool Block::GetCollision(std::shared_ptr<Collidable> collidable) const
+	{
+		auto gameObject = std::dynamic_pointer_cast<GameObject>(collidable);
+		assert(gameObject);
+
+		sf::Rect rect = gameObject->GetRect();
+		rect.width *= 1.1;
+		return GetRect().intersects(gameObject->GetRect());
+	}
+
+	void Block::OnHit()
+	{
+		hitCount = 0;
 	}
 
 	void Block::Update(float timeDelta)
@@ -18,28 +42,59 @@ namespace ArcanoidGame
 
 	}
 
-	void Block::Draw(sf::RenderWindow& window)
+	bool Block::IsBroken()
 	{
-		window.draw(shape);
+		return hitCount <= 0;
 	}
 
-	bool Block::CheckCollisionWithBall(const Ball& ball)
-	{		
-		/*const auto rect = shape.getGlobalBounds();
-		const auto ballPos = ball.GetPosition();*/
-
-		/*return GetRect().intersects(ball.GetRect());*/
-		const auto rect = shape.getGlobalBounds();
-		const auto ballPos = ball.GetPosition();
-		const float radius = BALL_SIZE / 2.f;
-
-		// Находим ближайшую точку на прямоугольнике
-		float closestX = std::clamp(ballPos.x, rect.left, rect.left + rect.width);
-		float closestY = std::clamp(ballPos.y, rect.top, rect.top + rect.height);
-
-		float dx = ballPos.x - closestX;
-		float dy = ballPos.y - closestY;
-
-		return dx * dx + dy * dy < radius * radius;
+	void SmoothDestroyableBlock::OnHit()
+	{
+		StartTimer(BREAK_DELAY);
 	}
+
+	SmoothDestroyableBlock::SmoothDestroyableBlock(const sf::Vector2f& position, sf::Color color)
+		: Block(position, color)
+		, color(color)
+	{
+
+	}
+
+	void SmoothDestroyableBlock::Update(float timeDelta)
+	{
+		UpdateTimer(timeDelta);
+	}
+
+	bool SmoothDestroyableBlock::GetCollision(std::shared_ptr<Collidable> collidable) const
+	{
+		if (isTimerStarted_)
+		{
+			return false;
+		}
+		auto gameObject = std::dynamic_pointer_cast<GameObject>(collidable);
+		assert(gameObject);
+
+		sf::Rect rect = gameObject->GetRect();
+		return GetRect().intersects(rect);
+	}
+
+	void SmoothDestroyableBlock::FinalAction()
+	{
+		--hitCount;
+	}
+
+	void SmoothDestroyableBlock::EachTickAction(float timeDelta)
+	{
+		color.a = 255 * currentTime_ / destroyTime_;
+		sprite.setColor(color);
+	}
+
+	UnbreakableBlock::UnbreakableBlock(const sf::Vector2f& position)
+		: Block(position, sf::Color::Color(105, 105, 105))
+	{
+	}
+
+	void UnbreakableBlock::OnHit()
+	{
+	}
+
 }

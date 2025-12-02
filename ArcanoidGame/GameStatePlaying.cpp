@@ -1,9 +1,9 @@
-#include "GameStatePlaying.h"
 #include "Game.h"
 #include "Application.h"
 #include "Text.h"
 #include <assert.h>
 #include <sstream>
+#include "GameStatePlaying.h"
 
 namespace ArcanoidGame
 {
@@ -16,7 +16,7 @@ namespace ArcanoidGame
 		// Init background
 		background.setSize(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
 		background.setPosition(0.f, 0.f);
-		background.setFillColor(sf::Color(0, 200, 0));
+		background.setFillColor(sf::Color::Black);
 
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
@@ -29,22 +29,9 @@ namespace ArcanoidGame
 		inputHintText.setOrigin(GetTextOrigin(inputHintText, { 1.f, 0.f }));
 
 		//Init platform and ball
-		
-		gameObjects.clear();
-		gameObjects.push_back(std::make_shared<Platform>());
-		gameObjects.push_back(std::make_shared<Ball>());
-		
+		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - PLATFORM_HEIGHT / 2.f })));
+		gameObjects.emplace_back(std::make_shared<Ball>(sf::Vector2f({ SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PLATFORM_HEIGHT - BALL_SIZE - 200.f })));
 		createBlocks();
-
-		for (auto&& object : gameObjects)
-		{
-			object->Init();
-		}
-
-		for (auto&& block : blocks)
-		{
-			block->Init();
-		}
 
 		// Init sounds
 		gameOverSound.setBuffer(gameOverSoundBuffer);
@@ -63,46 +50,44 @@ namespace ArcanoidGame
 	}
 
 	void GameStatePlayingData::Update(float timeDelta)
-	{
-		
+	{	
 		for (auto&& object : gameObjects)
 		{
 			object->Update(timeDelta);
 		}
 
-		Platform* platform = (Platform*)gameObjects[0].get();
-		Ball* ball = (Ball*)gameObjects[1].get();
-
-		const bool isCollision = platform->CheckCollisionWithBall(*ball);
-		if (isCollision) {
-			ball->ChangeDirectionY();
+		for (auto&& block : blocks)
+		{
+			block->Update(timeDelta);
 		}
-		
-		//////////
-		
-			/*const bool isCollisionWithBlock = block->CheckCollisionWithBall(*ball);
-			if (isCollisionWithBlock)
-			{
-				ball->ReboundFromPlatform();
-				gameObjects.erase(gameObjects.begin() + 2);
-			}
-		*/
+
+		std::shared_ptr <Platform> platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
+		std::shared_ptr<Ball> ball = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
+
+		const bool isCollision = platform->CheckCollision(ball);
+				
 		bool inverseX = false;
 		bool inverseY = false;
+		
+		bool isBlockBroken = false;
 
 		for (int i = blocks.size() - 1; i >= 0; --i)
 		{
-			if (blocks[i]->CheckCollisionWithBall(*ball))
+			if (!(isBlockBroken) && blocks[i]->CheckCollision(ball))
 			{
+				isBlockBroken = true;
 				const auto ballPos = ball->GetPosition();
 				const auto blockRect = blocks[i]->GetRect();
 
-				BallInverse(ballPos, blockRect, inverseX, inverseY);
-
-				blocks.erase(blocks.begin() + i);			
+				BallInverse(ballPos, blockRect, inverseX, inverseY);							
+			}
+			if (blocks[i]->IsBroken())
+			{
+				blocks.erase(blocks.begin() + i);
+				return;
 			}
 		}
-
+		
 		if (inverseX)
 		{
 			ball->ChangeDirectionX();
@@ -113,7 +98,6 @@ namespace ArcanoidGame
 			ball->ChangeDirectionY();
 		}
 		
-
 		const bool isGameFinished = !isCollision && ball->GetPosition().y > platform->GetRect().top;
 		const bool isGameWin = blocks.size() == 0;
 
@@ -163,16 +147,26 @@ namespace ArcanoidGame
 	void GameStatePlayingData::createBlocks()
 	{
 		int row = 0;
-		for (; row < BLOCKS_COUNT_ROWS; ++row)
+		for (; row < BLOCKS_COUNT_ROWS - 1; ++row)
 		{
 			for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
 			{
-				auto block = std::make_shared<Block>();
-				block->shape.setPosition(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * (BLOCK_HEIGHT + BLOCK_SHIFT) }));
-				blocks.emplace_back(block);
+				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
 			}
 		}
 
+		/*for (int col = 0; col < 3; ++col) 
+		{
+			blocks.emplace_back(std::make_shared<UnbreakableBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
+		}*/
+
+		for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
+		{
+			blocks.emplace_back(std::make_shared<StrongBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
+		}
+
+		blocks.emplace_back(std::make_shared<UnbreakableBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + 0 * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + (row + 1) * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
+		blocks.emplace_back(std::make_shared<UnbreakableBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + (BLOCKS_COUNT_IN_ROW - 1) * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + (row + 1) * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
 	}
 
 	void GameStatePlayingData::BallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& blockRect, bool& inverseX, bool& inverseY)
@@ -181,19 +175,16 @@ namespace ArcanoidGame
 		if (ballPos.y > blockRect.top + blockRect.height)
 		{
 			inverseY = true;
-			return;
 		}
 		//Левая часть
 		if (ballPos.x < blockRect.left)
 		{
 			inverseX = true;
-			return;
 		}
 		//Правая часть
 		if (ballPos.x > blockRect.left + blockRect.width)
 		{
 			inverseX = true;
-			return;
 		}
 	}
 }

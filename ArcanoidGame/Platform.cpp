@@ -12,12 +12,9 @@ namespace
 
 namespace ArcanoidGame
 {
-	void Platform::Init()
+	Platform::Platform(const sf::Vector2f& position)
+		: GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, PLATFORM_WIDTH, PLATFORM_HEIGHT)
 	{
-		assert(texture.loadFromFile(TEXTURES_PATH + TEXTURE_ID + ".png"));
-
-		InitSprite(sprite, PLATFORM_WIDTH, PLATFORM_HEIGHT, texture);
-		sprite.setPosition({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - PLATFORM_HEIGHT / 2.f });
 	}
 
 	void Platform::Update(float timeDelta)
@@ -32,21 +29,16 @@ namespace ArcanoidGame
 		}
 	}
 
-	void Platform::Move(float speed)
+	bool Platform::GetCollision(std::shared_ptr<Collidable> collidable) const
 	{
-		auto position = sprite.getPosition();
-		position.x = std::clamp(position.x + speed, PLATFORM_WIDTH / 2.f, SCREEN_WIDTH - PLATFORM_WIDTH / 2.f);
-		sprite.setPosition(position);
-	}
+		auto ball = std::static_pointer_cast<Ball>(collidable);
+		if (!ball) return false;
 
-	bool Platform::CheckCollisionWithBall(const Ball& ball)
-	{
 		auto sqr = [](float x) {
 			return x * x;
 			};
-
 		const auto rect = sprite.getGlobalBounds();
-		const auto ballPos = ball.GetPosition();
+		const auto ballPos = ball->GetPosition();
 		if (ballPos.x < rect.left) {
 			return sqr(ballPos.x - rect.left) + sqr(ballPos.y - rect.top) < sqr(BALL_SIZE / 2.0);
 		}
@@ -57,4 +49,27 @@ namespace ArcanoidGame
 
 		return std::fabs(ballPos.y - rect.top) <= BALL_SIZE / 2.0;
 	}
+
+	bool Platform::CheckCollision(std::shared_ptr<Collidable> collidable) {
+		auto ball = std::static_pointer_cast<Ball>(collidable);
+		if (!ball)
+			return false;
+
+		if (GetCollision(ball)) {
+			auto rect = GetRect();
+			auto ballPosInPlatform = (ball->GetPosition().x - (rect.left + rect.width / 2)) / (rect.width / 2);
+			ball->ChangeAngle(90 - 20 * ballPosInPlatform);
+			return true;
+		}
+		return false;
+	}
+
+	void Platform::Move(float speed)
+	{
+		auto position = sprite.getPosition();
+		position.x = std::clamp(position.x + speed, PLATFORM_WIDTH / 2.f, SCREEN_WIDTH - PLATFORM_WIDTH / 2.f);
+		sprite.setPosition(position);
+	}
+
+	
 }
