@@ -10,7 +10,7 @@ namespace ArcanoidGame
 	}
 
 	Application::Application() :
-		window(sf::VideoMode(ArcanoidGame::SCREEN_WIDTH, ArcanoidGame::SCREEN_HEIGHT), "ArcanoidGame")
+		window(sf::VideoMode(SETTINGS.SCREEN_WIDTH, SETTINGS.SCREEN_HEIGHT), "ArcanoidGame")
 	{
 		// Init random number generator
 		unsigned int seed = (unsigned int)time(nullptr); // Get current time as seed. You can also use any other number to fix randomization
@@ -40,7 +40,7 @@ namespace ArcanoidGame
 				break;
 			}
 
-			if (game.Update(TIME_PER_FRAME))
+			if (game.Update(SETTINGS.TIME_PER_FRAME))
 			{
 				// Draw everything here
 				// Clear the window first
@@ -58,9 +58,9 @@ namespace ArcanoidGame
 
 			float endTime = gameClock.getElapsedTime().asSeconds();
 			float deltaTime = endTime - startTime;
-			if (deltaTime < TIME_PER_FRAME) {
+			if (deltaTime < SETTINGS.TIME_PER_FRAME) {
 				// Reduce framerate to not spam CPU and GPU
-				sf::sleep(sf::seconds(TIME_PER_FRAME - deltaTime));
+				sf::sleep(sf::seconds(SETTINGS.TIME_PER_FRAME - deltaTime));
 			}
 		}
 	}

@@ -10,11 +10,11 @@ namespace ArcanoidGame
 	void GameStatePlayingData::Init()
 	{	
 		// Init game resources (terminate if error)
-		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
-		assert(gameOverSoundBuffer.loadFromFile(SOUNDS_PATH + "Death.wav"));
+		assert(font.loadFromFile(SETTINGS.FONTS_PATH + "Roboto-Regular.ttf"));
+		assert(gameOverSoundBuffer.loadFromFile(SETTINGS.SOUNDS_PATH + "Death.wav"));
 
 		// Init background
-		background.setSize(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
+		background.setSize(sf::Vector2f(SETTINGS.SCREEN_WIDTH, SETTINGS.SCREEN_HEIGHT));
 		background.setPosition(0.f, 0.f);
 		background.setFillColor(sf::Color::Black);
 
@@ -29,8 +29,8 @@ namespace ArcanoidGame
 		inputHintText.setOrigin(GetTextOrigin(inputHintText, { 1.f, 0.f }));
 
 		//Init platform and ball
-		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - PLATFORM_HEIGHT / 2.f })));
-		gameObjects.emplace_back(std::make_shared<Ball>(sf::Vector2f({ SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PLATFORM_HEIGHT - BALL_SIZE - 200.f })));
+		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f( SETTINGS.SCREEN_WIDTH / 2.0, SETTINGS.SCREEN_HEIGHT - SETTINGS.PLATFORM_HEIGHT / 2.f )));
+		gameObjects.emplace_back(std::make_shared<Ball>(sf::Vector2f( SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PLATFORM_HEIGHT - SETTINGS.BALL_SIZE - 200.f )));
 		createBlocks();
 
 		// Init sounds
@@ -147,11 +147,11 @@ namespace ArcanoidGame
 	void GameStatePlayingData::createBlocks()
 	{
 		int row = 0;
-		for (; row < BLOCKS_COUNT_ROWS - 1; ++row)
+		for (; row < SETTINGS.BLOCKS_COUNT_ROWS - 1; ++row)
 		{
-			for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
+			for (int col = 0; col < SETTINGS.BLOCKS_COUNT_IN_ROW; ++col)
 			{
-				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
+				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f({ SETTINGS.BLOCK_SHIFT + SETTINGS.BLOCK_WIDTH / 2.f + col * (SETTINGS.BLOCK_WIDTH + SETTINGS.BLOCK_SHIFT), 100.f + row * (SETTINGS.BLOCK_HEIGHT + SETTINGS.BLOCK_SHIFT) })));
 			}
 		}
 
@@ -160,13 +160,13 @@ namespace ArcanoidGame
 			blocks.emplace_back(std::make_shared<UnbreakableBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
 		}*/
 
-		for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
+		for (int col = 0; col < SETTINGS.BLOCKS_COUNT_IN_ROW; ++col)
 		{
-			blocks.emplace_back(std::make_shared<StrongBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
+			blocks.emplace_back(std::make_shared<StrongBlock>(sf::Vector2f({ SETTINGS.BLOCK_SHIFT + SETTINGS.BLOCK_WIDTH / 2.f + col * (SETTINGS.BLOCK_WIDTH + SETTINGS.BLOCK_SHIFT), 100.f + row * (SETTINGS.BLOCK_HEIGHT + SETTINGS.BLOCK_SHIFT) })));
 		}
 
-		blocks.emplace_back(std::make_shared<UnbreakableBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + 0 * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + (row + 1) * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
-		blocks.emplace_back(std::make_shared<UnbreakableBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + (BLOCKS_COUNT_IN_ROW - 1) * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + (row + 1) * (BLOCK_HEIGHT + BLOCK_SHIFT) })));
+		blocks.emplace_back(std::make_shared<UnbreakableBlock>(sf::Vector2f({ SETTINGS.BLOCK_SHIFT + SETTINGS.BLOCK_WIDTH / 2.f + 0 * (SETTINGS.BLOCK_WIDTH + SETTINGS.BLOCK_SHIFT), 100.f + (row + 1) * (SETTINGS.BLOCK_HEIGHT + SETTINGS.BLOCK_SHIFT) })));
+		blocks.emplace_back(std::make_shared<UnbreakableBlock>(sf::Vector2f({ SETTINGS.BLOCK_SHIFT + SETTINGS.BLOCK_WIDTH / 2.f + (SETTINGS.BLOCKS_COUNT_IN_ROW - 1) * (SETTINGS.BLOCK_WIDTH + SETTINGS.BLOCK_SHIFT), 100.f + (row + 1) * (SETTINGS.BLOCK_HEIGHT + SETTINGS.BLOCK_SHIFT) })));
 	}
 
 	void GameStatePlayingData::BallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& blockRect, bool& inverseX, bool& inverseY)

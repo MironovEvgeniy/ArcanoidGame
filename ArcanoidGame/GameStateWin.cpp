@@ -9,7 +9,7 @@ namespace ArcanoidGame
 {
 	void GameStateWinData::Init()
 	{
-		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
+		assert(font.loadFromFile(SETTINGS.RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
 
 		timeSinceGameWin = 0.f;
 
