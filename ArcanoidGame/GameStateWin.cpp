@@ -32,13 +32,13 @@ namespace ArcanoidGame
 		yesItem.text.setString("Yes");
 		yesItem.text.setFont(font);
 		yesItem.text.setCharacterSize(24);
-		yesItem.onPressCallback = [](MenuItem&) {Application::Instance().GetGame().SwitchStateTo(GameStateType::Playing); };
+		yesItem.onPressCallback = [](MenuItem&) {Application::Instance().GetGame().StartGame(); };
 
 		MenuItem noItem;
 		noItem.text.setString("No");
 		noItem.text.setFont(font);
 		noItem.text.setCharacterSize(24);
-		noItem.onPressCallback = [](MenuItem&) {Application::Instance().GetGame().SwitchStateTo(GameStateType::MainMenu); };
+		noItem.onPressCallback = [](MenuItem&) {Application::Instance().GetGame().ExitGame(); };
 
 		MenuItem GameWinItem;
 		GameWinItem.childrenOrientation = Orientation::Horizontal;

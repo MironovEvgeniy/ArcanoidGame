@@ -35,6 +35,7 @@ namespace ArcanoidGame
 	void Block::OnHit()
 	{
 		hitCount = 0;
+		Emit();
 	}
 
 	void Block::Update(float timeDelta)
@@ -56,7 +57,8 @@ namespace ArcanoidGame
 		: Block(position, color)
 		, color(color)
 	{
-
+		BlockPoints = SETTINGS.SMOOTH_BLOCK_POINT;
+		m_type = BlockType::Smooth;
 	}
 
 	void SmoothDestroyableBlock::Update(float timeDelta)
@@ -80,6 +82,7 @@ namespace ArcanoidGame
 	void SmoothDestroyableBlock::FinalAction()
 	{
 		--hitCount;
+		Emit();
 	}
 
 	void SmoothDestroyableBlock::EachTickAction(float timeDelta)
@@ -91,6 +94,7 @@ namespace ArcanoidGame
 	UnbreakableBlock::UnbreakableBlock(const sf::Vector2f& position)
 		: Block(position, sf::Color::Color(105, 105, 105))
 	{
+		m_type = BlockType::Unbreackable;
 	}
 
 	void UnbreakableBlock::OnHit()

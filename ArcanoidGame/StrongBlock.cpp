@@ -8,6 +8,9 @@ namespace ArcanoidGame
 		: SmoothDestroyableBlock(position, color)
 	{
 		hitCount = 2;
+		
+		BlockPoints = SETTINGS.STRONG_BLOCK_POINT;
+		m_type = BlockType::Strong;
 	}
 
 	void StrongBlock::OnHit()

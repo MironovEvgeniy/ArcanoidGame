@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Block.h"
 
+
 namespace ArcanoidGame
 {
 	class StrongBlock : public SmoothDestroyableBlock

@@ -28,32 +28,31 @@ namespace ArcanoidGame
 	class Game
 	{
 	public:
+		void StartGame();
+		void PauseGame();
+		void WinGame();
+		void LooseGame();
+		void UpdateGame(float timeDelta, sf::RenderWindow& window);
+		void ExitGame();
+		void QuitGame();
+		void ShowRecords();
+		void LoadNextLevel();
+
 		using RecordsTable = std::unordered_map<std::string, int>;
 
 		Game();
 		~Game();
 
-		void HandleWindowEvents(sf::RenderWindow& window);
-		bool Update(float timeDelta); // Return false if game should be closed
-		void Draw(sf::RenderWindow& window);
-		void Shutdown();
-
 		bool IsEnableOptions(GameOptions option) const;
 		void SetOption(GameOptions option, bool value);
-
 		const RecordsTable& GetRecordsTable() const { return recordsTable; }
 		int GetRecordByPlayerId(const std::string& playerId) const;
 		void UpdateRecord(const std::string& playerId, int score);
 
-		// Add new game state on top of the stack
-		void PushState(GameStateType stateType, bool isExclusivelyVisible);
-
 		// Remove current game state from the stack
 		void PopState();
-
-		// Remove all game states from the stack and add new one
-		void SwitchStateTo(GameStateType newState);
-
+		void setLastGameScore(int lastPlayerGameScore);
+		int GetLastGameScore() const { return lastGameScore; };
 
 	private:
 		std::vector<GameState> stateStack;
@@ -63,11 +62,20 @@ namespace ArcanoidGame
 
 		GameOptions options = GameOptions::Default;
 		RecordsTable recordsTable;
-	};
 
-	void InitGameState(GameState& state);
-	void ShutdownGameState(GameState& state);
-	void HandleWindowEventGameState(GameState& state, sf::Event& event);
-	void UpdateGameState(GameState& state, float timeDelta);
-	void DrawGameState(GameState& state, sf::RenderWindow& window);
+		int lastGameScore = 0;
+
+		// Add new game state on top of the stack
+		void PushState(GameStateType stateType, bool isExclusivelyVisible);
+
+		void Shutdown();
+		
+		void HandleWindowEvents(sf::RenderWindow& window);
+
+		bool Update(float timeDelta); // Return false if game should be closed
+		void Draw(sf::RenderWindow& window);
+
+		// Remove all game states from the stack and add new one
+		void SwitchStateTo(GameStateType newState);
+	};
 }

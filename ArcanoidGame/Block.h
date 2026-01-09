@@ -1,13 +1,15 @@
 #pragma once
 #include "Ball.h"
-
+#include "IObserver.h"
 #include "GameObject.h"
 #include "Collidable.h"
+#include "BlockType.h"
 #include "IDelayedAction.h"
 
 namespace ArcanoidGame
 {
-	class Block : public GameObject, public Collidable
+
+	class Block : public GameObject, public Collidable, public IObservable
 	{
 	public:
 		
@@ -20,9 +22,17 @@ namespace ArcanoidGame
 
 		bool IsBroken();
 
+		BlockType GetBlockType() { return m_type; };
+
+		int GetBlockPoint() { return BlockPoints; };
+
+		void Hit() { OnHit(); };
+
 	protected:
 		void OnHit();
 		int hitCount = 1;
+		int BlockPoints = 0;
+		BlockType m_type;
 	};
 
 	class SmoothDestroyableBlock : public Block, public IDelayedAction
@@ -30,6 +40,7 @@ namespace ArcanoidGame
 	protected:
 		void OnHit() override;
 		sf::Color color;
+		
 
 	public:
 		SmoothDestroyableBlock(const sf::Vector2f& position, sf::Color color = sf::Color::Green);

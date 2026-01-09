@@ -44,6 +44,15 @@
     <Filter Include="Sources\MenuInterface">
       <UniqueIdentifier>{ea524afc-6be3-4e46-bad6-81bb253b2df8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GameStates\Playing\SaveSystem">
+      <UniqueIdentifier>{9e46c4e3-b721-430a-84a3-658b8d63a4ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObjects\Ball\Decorators">
+      <UniqueIdentifier>{ecc1d3d9-0fe0-4069-b70c-921330a5a563}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Bonuses">
+      <UniqueIdentifier>{d88a7293-15f5-4ae4-a030-8c7bb6187d7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -102,6 +111,27 @@
     </ClCompile>
     <ClCompile Include="StrongBlock.cpp">
       <Filter>Sources\GameObjects\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelLoader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockFactory.cpp">
+      <Filter>Sources\GameObjects\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreSystem.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Bonus.cpp">
+      <Filter>Sources\Bonuses</Filter>
+    </ClCompile>
+    <ClCompile Include="BonusManager.cpp">
+      <Filter>Sources\Bonuses</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBall.cpp">
+      <Filter>Sources\Bonuses</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformSize.cpp">
+      <Filter>Sources\Bonuses</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +203,48 @@
     </ClInclude>
     <ClInclude Include="StrongBlock.h">
       <Filter>Sources\GameObjects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockFactory.h">
+      <Filter>Sources\GameObjects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelLoader.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="IObserver.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreSystem.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="IMemento.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveSystem.h">
+      <Filter>Sources\GameStates\Playing\SaveSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayingMemento.h">
+      <Filter>Sources\GameStates\Playing\SaveSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Bonus.h">
+      <Filter>Sources\Bonuses</Filter>
+    </ClInclude>
+    <ClInclude Include="BonusManager.h">
+      <Filter>Sources\Bonuses</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBall.h">
+      <Filter>Sources\Bonuses</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommand.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockType.h">
+      <Filter>Sources\GameObjects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="FragileBlock.h">
+      <Filter>Sources\Bonuses</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformSize.h">
+      <Filter>Sources\Bonuses</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

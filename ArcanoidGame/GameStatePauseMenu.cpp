@@ -29,7 +29,7 @@ namespace ArcanoidGame
 		exitItem.text.setFont(font);
 		exitItem.text.setCharacterSize(24);
 		exitItem.onPressCallback = [](MenuItem&) {
-			Application::Instance().GetGame().SwitchStateTo(GameStateType::MainMenu);
+			Application::Instance().GetGame().ExitGame();
 			};
 
 		MenuItem pauseMenu;

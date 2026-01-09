@@ -136,6 +136,11 @@ namespace ArcanoidGame
 		stateChangeType = GameStateChangeType::Pop;
 	}
 
+	void Game::setLastGameScore(int lastPlayerGameScore)
+	{
+		lastGameScore = lastPlayerGameScore;
+	}
+
 	void Game::SwitchStateTo(GameStateType newState)
 	{
 		pendingGameStateType = newState;
@@ -168,5 +173,63 @@ namespace ArcanoidGame
 	void Game::UpdateRecord(const std::string& playerId, int score)
 	{
 		recordsTable[playerId] = std::max(recordsTable[playerId], score);
+	}
+
+	void Game::StartGame()
+	{
+		SwitchStateTo(GameStateType::Playing);
+	}
+
+	void Game::PauseGame()
+	{
+		PushState(GameStateType::ExitDialog, false);
+	}
+
+	void Game::WinGame()
+	{
+		PushState(GameStateType::GameWin, false);
+	}
+
+	void Game::LooseGame()
+	{
+		PushState(GameStateType::GameOver, false);
+	}
+
+	void Game::UpdateGame(float timeDelta, sf::RenderWindow& window)
+	{
+		HandleWindowEvents(window);
+		if (Update(timeDelta))
+		{
+			window.clear();
+
+			Draw(window);
+
+			window.display();
+		}
+		else
+		{
+			window.close();
+		}
+	}
+
+	void Game::ExitGame()
+	{
+		SwitchStateTo(GameStateType::MainMenu);
+	}
+
+	void Game::QuitGame()
+	{
+		SwitchStateTo(GameStateType::None);
+	}
+
+	void Game::ShowRecords()
+	{
+		PushState(GameStateType::Records, true);
+	}
+	void Game::LoadNextLevel()
+	{
+		assert(stateStack.back().GetType() == GameStateType::Playing);
+		auto playingData = (stateStack.back().GetData<GameStatePlayingData>());
+		playingData->LoadNextLevel();
 	}
 }

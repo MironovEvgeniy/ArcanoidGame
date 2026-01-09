@@ -25,6 +25,7 @@ namespace ArcanoidGame
 		sf::RectangleShape background;
 		sf::Text gameOverText;
 		sf::Text hintText;
+		sf::Text currentRecordText;
 		std::vector<sf::Text> recordsTableTexts;
 	};
 }

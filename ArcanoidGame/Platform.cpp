@@ -2,6 +2,8 @@
 #include "Ball.h"
 #include "GameSettings.h"
 #include "Sprite.h"
+#include "BonusManager.h"
+#include "PlatformSize.h"
 #include <algorithm>
 #include <assert.h>
 
@@ -15,10 +17,21 @@ namespace ArcanoidGame
 	Platform::Platform(const sf::Vector2f& position)
 		: GameObject(SETTINGS.TEXTURES_PATH + TEXTURE_ID + ".png", position, SETTINGS.PLATFORM_WIDTH, SETTINGS.PLATFORM_HEIGHT)
 	{
+		Width = SETTINGS.PLATFORM_WIDTH;
 	}
 
 	void Platform::Update(float timeDelta)
 	{
+		if (BonusManager::IsSizeBonusActive())
+		{
+			PlatformSize sizeCommand(*this);
+			sizeCommand.Execute(*this);
+		}
+		else 
+		{
+			SetSize(SETTINGS.PLATFORM_WIDTH);
+		}
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
 			Move(-timeDelta * SETTINGS.PLATFORM_SPEED);
@@ -64,10 +77,22 @@ namespace ArcanoidGame
 		return false;
 	}
 
+	void Platform::SetSize(float width)
+	{
+		sprite.setScale(width / SETTINGS.PLATFORM_WIDTH, sprite.getScale().y);
+		Width = width;
+	}
+
+	float Platform::GetWidth() const
+	{
+		return Width;
+	}
+
 	void Platform::Move(float speed)
 	{
 		auto position = sprite.getPosition();
-		position.x = std::clamp(position.x + speed, SETTINGS.PLATFORM_WIDTH / 2.f, SETTINGS.SCREEN_WIDTH - SETTINGS.PLATFORM_WIDTH / 2.f);
+		//position.x = std::clamp(position.x + speed, SETTINGS.PLATFORM_WIDTH / 2.f, SETTINGS.SCREEN_WIDTH - SETTINGS.PLATFORM_WIDTH / 2.f);
+		position.x = std::clamp(position.x + speed, Width / 2.f, SETTINGS.SCREEN_WIDTH - Width / 2.f);
 		sprite.setPosition(position);
 	}
 

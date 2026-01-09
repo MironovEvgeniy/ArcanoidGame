@@ -3,6 +3,7 @@
 #include "Sprite.h"
 #include <assert.h>
 #include "randomizer.h"
+#include "FireBall.h"
 
 namespace
 {
@@ -20,11 +21,17 @@ namespace ArcanoidGame
 		const auto pi = std::acos(-1.f);
 		direction.x = std::cos(pi / 180.f * angle);
 		direction.y = std::sin(pi / 180.f * angle);
+		speed = SETTINGS.BALL_SPEED;
 	}
 	
 	void Ball::Update(float timeDelta)
 	{
-		const auto pos = sprite.getPosition() + SETTINGS.BALL_SPEED * timeDelta * direction;
+		timeDelta = multiplySpeed * timeDelta;
+
+		FireBall ballCommand(*this);
+		ballCommand.Execute(*this);
+
+		const auto pos = sprite.getPosition() + speed * timeDelta * direction;
 		sprite.setPosition(pos);
 
 		if (pos.x - SETTINGS.BALL_SIZE / 2.f <= 0 || pos.x + SETTINGS.BALL_SIZE / 2.f >= SETTINGS.SCREEN_WIDTH) {
@@ -34,6 +41,7 @@ namespace ArcanoidGame
 		if (pos.y - SETTINGS.BALL_SIZE / 2.f <= 0 || pos.y + SETTINGS.BALL_SIZE / 2.f >= SETTINGS.SCREEN_HEIGHT) {
 			direction.y *= -1;
 		}
+		Emit();
 	}
 
 	void Ball::ChangeDirectionX()
@@ -44,6 +52,21 @@ namespace ArcanoidGame
 	void Ball::ChangeDirectionY()
 	{
 		direction.y *= -1;
+	}
+
+	void Ball::SetSpeed(float speed)
+	{
+		this->speed = speed;
+	}
+
+	float Ball::GetSpeed() const
+	{
+		return speed;
+	}
+
+	void Ball::SetColor(const sf::Color& color)
+	{
+		sprite.setColor(color);
 	}
 
 	bool Ball::GetCollision(std::shared_ptr<Collidable> collidable) const
@@ -60,6 +83,15 @@ namespace ArcanoidGame
 		const auto pi = std::acos(-1.f);
 		direction.x = (x / abs(x)) * std::cos(pi / 180.f * x);
 		direction.y = -1 * abs(std::sin(pi / 180.f * x));
+	}
+
+	void Ball::restart()
+	{
+		GameObject::restart();
+		const float angle = 90;
+		const auto pi = std::acos(-1.f);
+		direction.x = std::cos(pi / 180.f * angle);
+		direction.y = std::sin(pi / 180.f * angle);
 	}
 
 	void Ball::OnHit()

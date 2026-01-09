@@ -25,6 +25,12 @@ namespace ArcanoidGame
 		gameOverText.setFillColor(sf::Color::Red);
 		gameOverText.setString("GAME OVER");
 
+		currentRecordText.setFont(font);
+		currentRecordText.setCharacterSize(32);
+		currentRecordText.setStyle(sf::Text::Bold);
+		currentRecordText.setFillColor(sf::Color::Green);
+		currentRecordText.setString("Your current result: ");
+
 		recordsTableTexts.reserve(SETTINGS.MAX_RECORDS_TABLE_SIZE);
 
 		std::multimap<int, std::string> sortedRecordsTable;
@@ -34,7 +40,7 @@ namespace ArcanoidGame
 			sortedRecordsTable.insert(std::make_pair(item.second, item.first));
 		}
 
-		bool isSnakeInTable = false;
+		bool isPlayerInTable = false;
 		auto it = sortedRecordsTable.rbegin();
 		for (int i = 0; i < SETTINGS.MAX_RECORDS_TABLE_SIZE && it != sortedRecordsTable.rend(); ++i, ++it) // Note, we can do several actions in for action block
 		{
@@ -50,7 +56,7 @@ namespace ArcanoidGame
 			if (it->second == PLAYER_NAME)
 			{
 				text.setFillColor(sf::Color::Green);
-				isSnakeInTable = true;
+				isPlayerInTable = true;
 			}
 			else
 			{
@@ -59,7 +65,7 @@ namespace ArcanoidGame
 		}
 
 		// If snake is not in table, replace last element with him
-		if (!isSnakeInTable)
+		if (!isPlayerInTable)
 		{
 			sf::Text& text = recordsTableTexts.back();
 			std::stringstream sstream;
@@ -81,11 +87,11 @@ namespace ArcanoidGame
 		{
 			if (event.key.code == sf::Keyboard::Space)
 			{
-				Application::Instance().GetGame().SwitchStateTo(GameStateType::Playing);
+				Application::Instance().GetGame().StartGame();
 			}
 			else if (event.key.code == sf::Keyboard::Escape)
 			{
-				Application::Instance().GetGame().SwitchStateTo(GameStateType::MainMenu);
+				Application::Instance().GetGame().ExitGame();
 			}
 		}
 	}
@@ -101,6 +107,8 @@ namespace ArcanoidGame
 
 	void GameStateGameOverData::Draw(sf::RenderWindow& window)
 	{
+		Game& game = Application::Instance().GetGame();
+
 		sf::Vector2f viewSize = window.getView().getSize();
 
 		background.setOrigin(0.f, 0.f);
@@ -108,8 +116,13 @@ namespace ArcanoidGame
 		window.draw(background);
 
 		gameOverText.setOrigin(GetTextOrigin(gameOverText, { 0.5f, 1.f }));
-		gameOverText.setPosition(viewSize.x / 2.f, viewSize.y / 2 - 50.f);
+		gameOverText.setPosition(viewSize.x / 2.f, viewSize.y / 2 - 100.f);
 		window.draw(gameOverText);
+
+		currentRecordText.setOrigin(GetTextOrigin(gameOverText, { 0.5f, 1.f }));
+		currentRecordText.setPosition(viewSize.x / 2.f, viewSize.y / 2 - 20.f);
+		currentRecordText.setString("Your current result: " + std::to_string( game.GetLastGameScore() ) );
+		window.draw(currentRecordText);
 
 		// We need to create new vector here as DrawItemsList needs vector of pointers
 		std::vector<sf::Text*> textsList;

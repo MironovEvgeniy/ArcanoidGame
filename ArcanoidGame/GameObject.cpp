@@ -16,4 +16,9 @@ namespace ArcanoidGame
 	{
 		DrawSprite(sprite, window);
 	}
+
+	void GameObject::restart()
+	{
+		sprite.setPosition(startPosition);
+	}
 }
